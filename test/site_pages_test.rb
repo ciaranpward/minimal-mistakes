@@ -59,6 +59,31 @@ class SitePagesTest < Minitest::Test
     assert_active_nav_link "schedule/index.html", "Schedule"
   end
 
+  def test_schedule_page_includes_draft_timetable_content
+    schedule_html = File.read(File.join(OUTPUT_DIR, "schedule/index.html"))
+
+    assert_includes schedule_html, "Draft Timetable"
+    assert_includes schedule_html, "Monday"
+    assert_includes schedule_html, "L1: Quantum computing"
+    assert_includes schedule_html, "W5: InQ computables and protocols"
+    assert_includes schedule_html, "Workshop dinner"
+  end
+
+  def test_page_content_typography_uses_justified_text_and_paragraph_spacing
+    css = File.read(File.join(OUTPUT_DIR, "assets/css/main.css"))
+
+    assert_match(/\.page__content p,\.page__content li,\.page__content dl\{[^}]*text-align:justify;?/, css)
+    assert_match(/\.page__content p\{[^}]*margin:0 0 1\.3em;?/, css)
+  end
+
+  def test_home_page_renders_body_copy_as_paragraphs
+    home_html = File.read(File.join(OUTPUT_DIR, "index.html"))
+
+    assert_includes home_html, "<p>The purpose of this school"
+    assert_includes home_html, "<p>This will be a five day event"
+    assert_includes home_html, "<p>This event is being run by Quantinuum"
+  end
+
   private
 
   def assert_active_nav_link(relative_path, link_title)
