@@ -14,8 +14,13 @@
         </a>
         <ul class="visible-links">
           {%- for link in site.data.navigation.main -%}
+            {% assign is_active = false %}
+            {% if link.nav_id and include.nav_id == link.nav_id %}
+              {% assign is_active = true %}
+            {% endif %}
             <li class="masthead__menu-item">
               <a
+                class="nav__link{% if is_active %} is-active{% endif %}"
                 href="{{ link.url | relative_url }}"
                 {% if link.description %} title="{{ link.description }}"{% endif %}
                 {% if link.target %} target="{{ link.target }}"{% endif %}
